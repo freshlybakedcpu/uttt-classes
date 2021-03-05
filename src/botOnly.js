@@ -4,7 +4,7 @@ const sharp = require('sharp');
 const Board = require('../classes/board.js');
 const Player = require('../classes/player.js');
 const uttt = require('../json/uttt.json');
-const imgcomp = require('./imagecomposition');
+const imgcomp = require('./imagecomp-sharp');
 
 const board = new Board();
 

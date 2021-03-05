@@ -6,20 +6,21 @@
   "private": "true",
   "scripts": {
     "test": "mocha",
-    "bot": "node botOnly.js"
+    "bot": "node src/botOnly.js"
   },
   "author": {
     "name": "freshlybakedcpu"
   },
   "license": "ISC",
   "dependencies": {
+    "canvas": "^2.7.0",
     "readline-sync": "^1.4.10",
-    "sharp": "^0.27.0"
+    "sharp": "^0.27.2"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
+    "chai": "^4.3.3",
     "chai-string": "^1.5.0",
-    "mocha": "^8.2.1"
+    "mocha": "^8.3.0"
   },
   "engines": {
     "node": ">= 15.5.0",
