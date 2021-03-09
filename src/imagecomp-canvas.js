@@ -18,19 +18,14 @@ for(let i = 0; i < numTimes; i++) {
 // https://stackoverflow.com/questions/18983138/callback-after-all-asynchronous-foreach-callbacks-are-completed
 nodeCanvas.loadImage('images/board.png').then(board => {
 	ctx.drawImage(board, 0, 0);
-
+	/*
 	boardstate.forEach(e => {
 		drawPiece(e);
 	});
-	/*
+	*/
 	const requests = boardstate.map((e) => {
 		return new Promise((resolve) => {
-			if(e.charAt(0) === 'X') {
-				drawX(e.substring(1), resolve);
-			}
-			else {
-				drawO(e.substring(1), resolve);
-			}
+			drawPiece(e, resolve);
 			// asyncFunction(item, resolve);
 		});
 	});
@@ -38,17 +33,19 @@ nodeCanvas.loadImage('images/board.png').then(board => {
 	Promise.all(requests).then(() => {
 		console.log('done');
 		fs.writeFileSync('./images/image.png', canvas.toBuffer('image/png'));
+	}).catch(err => {
+		console.log(err);
 	});
-	*/
 
-	console.log('done');
+	// console.log('done');
 	// fs.writeFileSync('./images/image.png', canvas.toBuffer('image/png'));
 });
 
 async function drawPiece(piece) {
 	nodeCanvas.loadImage(`images/tictactoe_${piece.charAt(0)}.png`).then(pieceImage => {
 		ctx.drawImage(pieceImage, spacePositions[piece.substring(1)][0], spacePositions[piece.substring(1)][1], 60, 60);
-		fs.writeFileSync('./images/image.png', canvas.toBuffer('image/png'));
+		resolve();
+		// fs.writeFileSync('./images/image.png', canvas.toBuffer('image/png'));
 	}).catch(err => {
 		console.log(err);
 	});
