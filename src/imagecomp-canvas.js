@@ -23,6 +23,7 @@ nodeCanvas.loadImage('images/board.png').then(board => {
 		drawPiece(e);
 	});
 	*/
+	/*
 	const requests = boardstate.map((e) => {
 		return new Promise((resolve) => {
 			drawPiece(e, resolve);
@@ -36,17 +37,30 @@ nodeCanvas.loadImage('images/board.png').then(board => {
 	}).catch(err => {
 		console.log(err);
 	});
+	*/
+	const asyncFunction = async item => {
+		return drawPiece(item);
+	};
+	const getData = async () => {
+		return Promise.all(boardstate.map(e => asyncFunction(e)));
+	};
 
+	getData().then(() => {
+		console.log('done');
+		fs.writeFileSync('./images/image.png', canvas.toBuffer('image/png'));
+	});
 	// console.log('done');
 	// fs.writeFileSync('./images/image.png', canvas.toBuffer('image/png'));
 });
 
-async function drawPiece(piece) {
-	nodeCanvas.loadImage(`images/tictactoe_${piece.charAt(0)}.png`).then(pieceImage => {
-		ctx.drawImage(pieceImage, spacePositions[piece.substring(1)][0], spacePositions[piece.substring(1)][1], 60, 60);
-		resolve();
+function drawPiece(piece) {
+	return new Promise(resolve => {
+		nodeCanvas.loadImage(`images/tictactoe_${piece.charAt(0)}.png`).then(pieceImage => {
+			ctx.drawImage(pieceImage, spacePositions[piece.substring(1)][0], spacePositions[piece.substring(1)][1], 60, 60);
+			resolve();
 		// fs.writeFileSync('./images/image.png', canvas.toBuffer('image/png'));
-	}).catch(err => {
-		console.log(err);
+		}).catch(err => {
+			console.log(err);
+		});
 	});
 }
