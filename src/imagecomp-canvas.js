@@ -38,9 +38,11 @@ nodeCanvas.loadImage('images/board.png').then(board => {
 		console.log(err);
 	});
 	*/
+	// https://flaviocopes.com/javascript-async-await-array-map/
 	const asyncFunction = async item => {
 		return drawPiece(item);
 	};
+
 	const getData = async () => {
 		return Promise.all(boardstate.map(e => asyncFunction(e)));
 	};
