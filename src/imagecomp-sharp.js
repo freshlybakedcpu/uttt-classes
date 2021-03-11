@@ -44,7 +44,7 @@ module.exports.run = (board, tictactoe_X, tictactoe_O, tint) => {
 		// Old code that sorted out values that started with 'Y'. Maybe unnecessary?
 		boardstate = sortingArray.filter(move => !move.startsWith('Y'));
 
-		console.log(boardstate);
+		// console.log(boardstate);
 
 		// console.log(`Boardstate: ${boardstate}`);
 		// console.log(`Player 1: ${player1}`);

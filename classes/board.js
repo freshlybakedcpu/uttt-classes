@@ -22,6 +22,9 @@ class Board {
 		this._lastMove = null;
 	}
 
+	importJSON(jsonData) {
+		Object.assign(this, jsonData);
+	}
 	inputMove(position, player) {
 		const square = '_' + position.substring(0, 2);
 		const place = '_' + position.substring(2, 4);

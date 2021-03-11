@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const rl = require('readline-sync');
 const sharp = require('sharp');
 const Board = require('./classes/board.js');
@@ -27,7 +28,9 @@ const player2 = new Player(playerType('2'));
 function playerType(num) {
 	switch (rl.question(`Is \x1b[48;5;${(num === '1') ? '1' : '33'}mplayer ${num}\x1b[0m a bot or human? `).toLowerCase()) {
 	case 'bot' : return 'bot';
+	case 'b' : return 'bot';
 	case 'human' : return 'human';
+	case 'h' : return 'human';
 	default : {
 		console.log('Invalid input. Choices: \'bot\', \'human\'.\n');
 		return playerType(num);
@@ -54,15 +57,15 @@ const tictactoe_O = imageAssignment('O');
 function imageAssignment(piece) {
 	switch (imageBool) {
 	case true : {
-		const path = rl.question(`\tPlease provide the path of the image that will represent ${(piece === 'X') ? 'player 1' : 'player 2'}: `);
-		switch (path) {
+		const givenPath = rl.question(`\tPlease provide the path of the image that will represent ${(piece === 'X') ? 'player 1' : 'player 2'}: `);
+		switch (givenPath) {
 		case 'default' : {
 			return (piece === 'X') ? './images/tictactoe_X.png' : './images/tictactoe_O.png';
 		}
 		default : {
-			switch (fs.existsSync(path)) {
+			switch (fs.existsSync(givenPath)) {
 			case true : {
-				return path;
+				return givenPath;
 			}
 			default : {
 				console.log('\tInvalid path.\n');
@@ -89,6 +92,48 @@ function tintPrompt() {
 		tintPrompt();
 	}
 	}
+}
+
+const importPath = importPrompt();
+
+function importPrompt() {
+	switch (rl.question('\nWould you like to import existing JSON data? (y/n) ').toLowerCase()) {
+	case 'y' : return importPathPrompt();
+	case 'n' : return false;
+	default : {
+		console.log('Invalid input. Choices: \'y\', \'n\'.\n');
+		importPrompt();
+	}
+	}
+}
+
+function importPathPrompt() {
+	const givenPath = rl.question('\nWhat is the path? ');
+	try {
+		if (fs.existsSync(path.resolve(givenPath))) {
+			return path.resolve(givenPath);
+		}
+		else {
+			return importPathPrompt();
+		}
+	}
+	catch(err) {
+		console.error(err);
+	}
+}
+
+if (importPath) {
+	console.log('HEY');
+	fs.readFileSync(require.resolve(importPath), (err, data) => {
+		if (err) {
+			console.log(`Error: ${err}`);
+		}
+		else {
+			console.log(`Trying...\n${board}`);
+			board.importJSON(JSON.parse(data));
+			console.log(`Success!\n${board}`);
+		}
+	});
 }
 
 (function loop() {
@@ -139,7 +184,26 @@ function tintPrompt() {
 
 function userPrompt(player) {
 	const choice = rl.question(`\n\x1b[48;5;${(player === 'player1') ? '1' : '33'}m${player}\x1b[0m, your move: `);
-	return (validMoves.includes(choice)) ? choice : invalidMovePrompt(player);
+	if(validMoves.includes(choice)) {
+		return choice;
+	}
+	else if(choice === 'export') {
+		// console.log(JSON.stringify(board));
+		try {
+			fs.writeFileSync('output/export.json', JSON.stringify(board, null, '\t'), function(err) {
+				if(err) {
+					console.log(err);
+				}
+			});
+		}
+		catch (err) {
+			console.error(err);
+		}
+		return userPrompt(player);
+	}
+	else {
+		return invalidMovePrompt(player);
+	}
 }
 
 function invalidMovePrompt(player) {
