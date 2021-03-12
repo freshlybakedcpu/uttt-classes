@@ -1,6 +1,5 @@
 const nodeCanvas = require('canvas');
 const fs = require('fs');
-const { resolve } = require('path');
 const { spacePositions, squares, innerSquares } = require('../json/uttt.json');
 
 const canvas = nodeCanvas.createCanvas(600, 600);

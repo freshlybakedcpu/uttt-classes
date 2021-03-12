@@ -1,3 +1,5 @@
+'use strict';
+
 const fs = require('fs');
 const path = require('path');
 const rl = require('readline-sync');
@@ -97,7 +99,7 @@ function tintPrompt() {
 const importPath = importPrompt();
 
 function importPrompt() {
-	switch (rl.question('\nWould you like to import existing JSON data? (y/n) ').toLowerCase()) {
+	switch (rl.question('\nWould you like to import existing save data? (y/n) ').toLowerCase()) {
 	case 'y' : return importPathPrompt();
 	case 'n' : return false;
 	default : {
@@ -107,11 +109,10 @@ function importPrompt() {
 	}
 }
 
-// https://stackoverflow.com/questions/30339675/how-to-map-json-data-to-a-class
 function importPathPrompt() {
 	const givenPath = rl.question('\nWhat is the path? ');
 	try {
-		if (fs.existsSync(path.resolve(givenPath))) {
+		if (fs.existsSync(path.resolve(givenPath)) && /^.+\.(?:(?:[jJ][sS][oO][nN]))$/.test(givenPath)) {
 			return path.resolve(givenPath);
 		}
 		else {
@@ -123,18 +124,22 @@ function importPathPrompt() {
 	}
 }
 
+// https://stackoverflow.com/questions/30339675/how-to-map-json-data-to-a-class
 if (importPath) {
-	console.log('HEY');
+	console.log(importPath);
 	fs.readFileSync(require.resolve(importPath), (err, data) => {
+		console.log('Reading file...');
 		if (err) {
 			console.log(`Error: ${err}`);
 		}
 		else {
 			console.log(`Trying...\n${board}`);
+			Object.assign(board, JSON.parse(data));
 			board.importJSON(JSON.parse(data));
 			console.log(`Success!\n${board}`);
 		}
 	});
+	console.log('Done?');
 }
 
 (function loop() {
@@ -191,7 +196,7 @@ function userPrompt(player) {
 	else if(choice === 'export') {
 		// console.log(JSON.stringify(board));
 		try {
-			fs.writeFileSync('output/export.json', JSON.stringify(board, null, '\t'), function(err) {
+			fs.writeFileSync('output/save.json', JSON.stringify(board, null, '\t'), function(err) {
 				if(err) {
 					console.log(err);
 				}
