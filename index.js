@@ -107,6 +107,7 @@ function importPrompt() {
 	}
 }
 
+// https://stackoverflow.com/questions/30339675/how-to-map-json-data-to-a-class
 function importPathPrompt() {
 	const givenPath = rl.question('\nWhat is the path? ');
 	try {
