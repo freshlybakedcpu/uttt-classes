@@ -1,4 +1,4 @@
-class square {
+class Square {
 	constructor() {
 		this._X1 = null;
 		this._X2 = null;
@@ -88,4 +88,4 @@ class square {
 	}
 }
 
-module.exports = square;
+module.exports = Square;

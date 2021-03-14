@@ -126,20 +126,10 @@ function importPathPrompt() {
 
 // https://stackoverflow.com/questions/30339675/how-to-map-json-data-to-a-class
 if (importPath) {
-	console.log(importPath);
-	fs.readFileSync(require.resolve(importPath), (err, data) => {
-		console.log('Reading file...');
-		if (err) {
-			console.log(`Error: ${err}`);
-		}
-		else {
-			console.log(`Trying...\n${board}`);
-			Object.assign(board, JSON.parse(data));
-			board.importJSON(JSON.parse(data));
-			console.log(`Success!\n${board}`);
-		}
-	});
-	console.log('Done?');
+	const jsonData = fs.readFileSync(importPath);
+	Object.assign(board, JSON.parse(jsonData));
+	// board.importJSON(JSON.parse(jsonData));
+	console.log(board);
 }
 
 (function loop() {

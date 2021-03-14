@@ -17,26 +17,7 @@ for(let i = 0; i < numTimes; i++) {
 // https://stackoverflow.com/questions/18983138/callback-after-all-asynchronous-foreach-callbacks-are-completed
 nodeCanvas.loadImage('images/board.png').then(board => {
 	ctx.drawImage(board, 0, 0);
-	/*
-	boardstate.forEach(e => {
-		drawPiece(e);
-	});
-	*/
-	/*
-	const requests = boardstate.map((e) => {
-		return new Promise((resolve) => {
-			drawPiece(e, resolve);
-			// asyncFunction(item, resolve);
-		});
-	});
 
-	Promise.all(requests).then(() => {
-		console.log('done');
-		fs.writeFileSync('./images/image.png', canvas.toBuffer('image/png'));
-	}).catch(err => {
-		console.log(err);
-	});
-	*/
 	// https://flaviocopes.com/javascript-async-await-array-map/
 	const asyncFunction = async item => {
 		return drawPiece(item);
@@ -48,7 +29,7 @@ nodeCanvas.loadImage('images/board.png').then(board => {
 
 	getData().then(() => {
 		console.log('done');
-		fs.writeFileSync('./images/image.png', canvas.toBuffer('image/png'));
+		fs.writeFileSync('./output/image.png', canvas.toBuffer('image/png'));
 	});
 	// console.log('done');
 	// fs.writeFileSync('./images/image.png', canvas.toBuffer('image/png'));
