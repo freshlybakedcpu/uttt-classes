@@ -1,10 +1,10 @@
 const fs = require('fs');
 const rl = require('readline-sync');
-const sharp = require('sharp');
+// const sharp = require('sharp');
 const Board = require('../classes/board.js');
 const Player = require('../classes/player.js');
 const uttt = require('../json/uttt.json');
-const imgcomp = require('./imagecomp-sharp');
+// const imgcomp = require('./imagecomp-sharp');
 
 const board = new Board();
 
@@ -12,11 +12,13 @@ let turn = 'player1';
 let turnNumber = 1;
 let validMoves = uttt.fullboard;
 
+/*
 fs.truncateSync('./output/gameHistory.txt', 0);
 sharp('./images/board.png')
 	.sharpen()
 	.png()
 	.toFile('./output/board.png');
+*/
 
 // Game setup
 console.log('Welcome to Ultimate Tic-Tac-Toe!\n');
@@ -24,10 +26,10 @@ console.log('Welcome to Ultimate Tic-Tac-Toe!\n');
 const player1 = new Player('bot');
 const player2 = new Player('bot');
 
-const tictactoe_X = './images/tictactoe_X.png';
-const tictactoe_O = './images/tictactoe_O.png';
+// const tictactoe_X = './images/tictactoe_X.png';
+// const tictactoe_O = './images/tictactoe_O.png';
 
-const tint = false;
+// const tint = false;
 
 (function loop() {
 	if (board._winner === null) {
@@ -53,10 +55,10 @@ const tint = false;
 		turn = (turn === 'player1') ? 'player2' : 'player1';
 		validMoves = board.validMoves(move);
 		console.log(validMoves);
-		imgcomp.run(board, tictactoe_X, tictactoe_O, tint).then(() => {
-			turnNumber++;
-			loop();
-		});
+		// imgcomp.run(board, tictactoe_X, tictactoe_O, tint).then(() => {
+		turnNumber++;
+		loop();
+		// });
 	}
 	else {
 		try {

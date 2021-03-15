@@ -1,61 +1,56 @@
-1	player1: C1Y2
-2	player2: B2X2
-3	player1: A2Z2
-4	player2: C2X3
-5	player1: A3Z3
-6	player2: C3Z3
-7	player1: C3Z2
-8	player2: C2Z1
-9	player1: C1Z1
-10	player2: C1X2
-11	player1: A2X1
-12	player2: A1Y1
-13	player1: B1X2
-14	player2: A2Y1
-15	player1: B1X1
-16	player2: A1Z2
-17	player1: C2X1
-18	player2: A1Z1
-19	player1: C1Z3
-20	player2: C3X1
-21	player1: A1Y2
-22	player2: B2Y2
-23	player1: B2Y3
-24	player2: B3Y1
-25	player1: B1Z2
-26	player2: C2Z3
-27	player1: C3X2
-28	player2: A2X3
-29	player1: A3X1
-30	player2: A1X3
-31	player1: A3Z2
-32	player2: C2Y1
-33	player1: B1X3
-	B1; Winner: Player 134	player2: A3X3
-35	player1: A3Y2
-	A3; Winner: Player 136	player2: B2X1
-37	player1: A1Z3
-38	player2: C3Z1
-39	player1: C1Z2
-	C1; Winner: Player 140	player2: C2Z2
-	C2; Winner: Player 241	player1: A1X2
-42	player2: A2Z1
-43	player1: B3Z1
-44	player2: B3Z3
-45	player1: C3Y1
-46	player2: B2X3
-	B2; Winner: Player 247	player1: A2Z3
-48	player2: C3Y3
+1	player1: B1Z1
+2	player2: C1Z2
+3	player1: C2X2
+4	player2: A2Z3
+5	player1: C3Y1
+6	player2: B1Z3
+7	player1: C3Y2
+8	player2: B2Y1
+9	player1: B1Y3
+10	player2: B3X1
+11	player1: A1Z1
+12	player2: C1Z3
+13	player1: C3X3
+14	player2: A3Z3
+15	player1: C3Z3
+16	player2: C3X2
+17	player1: A2Z1
+18	player2: C1Y1
+19	player1: B1X1
+20	player2: A1X3
+21	player1: A3X2
+22	player2: A2X2
+23	player1: A2Y1
+24	player2: B1Y1
+25	player1: B1Y2
+26	player2: B2Y3
+27	player1: B3Z2
+28	player2: C2Y3
+29	player1: B3Z1
+30	player2: C1Z1
+	C1; Winner: Player 231	player1: B1X3
+	B1; Winner: Player 132	player2: A3Z1
+33	player1: C2X3
+34	player2: A3X1
+35	player1: A1X1
+36	player2: A1Y3
+37	player1: B3X2
+38	player2: A2Y2
+39	player1: B2X3
+40	player2: A3X3
+41	player1: A3Y2
+42	player2: B2X1
+43	player1: A1Y1
+	A1; Winner: Player 144	player2: A3Y3
+	A3; Winner: Player 245	player1: B3Y1
+46	player2: C2Y1
+47	player1: C2Z3
+48	player2: C3X1
 49	player1: B3X3
-50	player2: B3Z2
-51	player1: C3X3
-52	player2: B3X1
-53	player1: A1Y3
-54	player2: B3Y3
-55	player1: B3X2
-56	player2: A2X2
-57	player1: A2Y2
-	A2; Winner: Player 158	player2: B3Y2
-	B3; Winner: Player 259	player1: A1X1
-	A1; Winner: Player 1
-Player 1 has won.
+50	player2: A2X1
+	A2; Winner: Player 251	player1: B2Z3
+52	player2: C3Z1
+53	player1: C2Y2
+54	player2: B2Z1
+	B2; Winner: Player 2
+Player 2 has won.

@@ -20,7 +20,7 @@ module.exports.run = (board, tictactoe_X, tictactoe_O, tint) => {
 	const localPieces = [];
 	const globalPieces = [];
 	const localLines = [];
-	let globalLine;
+	const globalLine = [];
 
 	for (const [key, value] of Object.entries(board)) {
 		if (squares.includes(key.substring(1))) {
@@ -41,7 +41,7 @@ module.exports.run = (board, tictactoe_X, tictactoe_O, tint) => {
 			switch (value.startsWith('X') || value.startsWith('O')) {
 			case true : {
 				// boardstate.push(`L${value.substring(1)}`);
-				globalLine = `L${value.substring(1)}`;
+				globalLine.push(`L${value.substring(1)}`);
 			}
 			}
 		}
@@ -73,34 +73,55 @@ module.exports.run = (board, tictactoe_X, tictactoe_O, tint) => {
 	nodeCanvas.loadImage('images/board.png').then(boardImg => {
 		ctx.drawImage(boardImg, 0, 0);
 
-		const asyncPieceFunction = async item => {
-			return drawLocalPiece(item);
+		const asyncPieceFunction = async (item, size) => {
+			return drawPiece(item, size);
 		};
 
 		const localPieceDrawing = async () => {
-			return Promise.all(localPieces.map(e => asyncPieceFunction(e)));
+			return Promise.all(localPieces.map(e => asyncPieceFunction(e, 60)));
 		};
 
 		localPieceDrawing().then(() => {
-			const asyncLineFunction = async item => {
+			const asyncLocalLineFunction = async item => {
 				return drawLocalLine(item);
 			};
 
 			const localLineDrawing = async () => {
-				return Promise.all(localLines.map(e => asyncLineFunction(e)));
+				return Promise.all(localLines.map(e => asyncLocalLineFunction(e)));
 			};
 
 			localLineDrawing().then(() => {
-				fs.writeFileSync('./output/image.png', canvas.toBuffer('image/png'));
-				console.log(`Done: ${Date.now() - startTime} ms`);
+				const globalPieceDrawing = async () => {
+					return Promise.all(globalPieces.map(e => asyncPieceFunction(e, 180)));
+				};
+
+				globalPieceDrawing().then(() => {
+					const asyncGlobalLineFunction = async item => {
+						return drawGlobalLine(item);
+					};
+
+					const globalLineDrawing = async () => {
+						return Promise.all(globalLine.map(e => asyncGlobalLineFunction(e)));
+					};
+
+					globalLineDrawing().then(() => {
+						fs.writeFileSync('./output/image.png', canvas.toBuffer('image/png'));
+						console.log(`Done: ${Date.now() - startTime} ms`);
+					});
+				});
 			});
 		});
 	});
 
-	async function drawLocalPiece(piece) {
+	async function drawPiece(piece, size) {
 		return new Promise(resolve => {
 			nodeCanvas.loadImage(`images/tictactoe_${piece.charAt(0)}.png`).then(pieceImage => {
-				ctx.drawImage(pieceImage, spacePositions[piece.substring(1)][0], spacePositions[piece.substring(1)][1], 60, 60);
+				/*
+				if(size === 60) {
+					ctx.filter = 'contrast(1.4) sepia(1) drop-shadow(-9px 9px 3px #e81)';
+				}
+				*/
+				ctx.drawImage(pieceImage, spacePositions[piece.substring(1)][0], spacePositions[piece.substring(1)][1], size, size);
 				resolve();
 			}).catch(err => {
 				console.log(err);
@@ -122,7 +143,6 @@ module.exports.run = (board, tictactoe_X, tictactoe_O, tint) => {
 			}
 			case 'verticalsmall' : {
 				ctx.save();
-				// ctx.rotate((Math.PI / 180) * 45);
 				ctx.fillStyle = '#000000';
 				ctx.fillRect(25 + spacePositions[line.substring(1, 5)][0], spacePositions[line.substring(1, 5)][1], 10, 190);
 				ctx.restore();
@@ -130,20 +150,24 @@ module.exports.run = (board, tictactoe_X, tictactoe_O, tint) => {
 				break;
 			}
 			case 'diagonalbacksmall' : {
-				console.log(line);
 				ctx.save();
+				ctx.translate(spacePositions[line.substring(1, 5)][0], spacePositions[line.substring(1, 5)][1]);
 				ctx.rotate((Math.PI / 180) * 45);
+				ctx.translate(-spacePositions[line.substring(1, 5)][0], -spacePositions[line.substring(1, 5)][1]);
 				ctx.fillStyle = '#000000';
-				ctx.fillRect(spacePositions[line.substring(1, 5)][0] + 235, spacePositions[line.substring(1, 5)][1] - 270, 255, 10);
+				ctx.fillRect(spacePositions[line.substring(1, 5)][0] + 8, spacePositions[line.substring(1, 5)][1] - 5, 255, 10);
 				ctx.restore();
 				resolve();
 				break;
 			}
 			case 'diagonalforwardsmall' : {
+				console.log(line);
 				ctx.save();
+				ctx.translate(spacePositions[line.substring(1, 5)][0], spacePositions[line.substring(1, 5)][1]);
 				ctx.rotate((Math.PI / 180) * -45);
+				ctx.translate(-spacePositions[line.substring(1, 5)][0], -spacePositions[line.substring(1, 5)][1]);
 				ctx.fillStyle = '#000000';
-				ctx.fillRect(spacePositions[line.substring(1, 5)][0] - (255 / 2) - (10 / 2), (255 / 2) + (10 / 2) + spacePositions[line.substring(1, 3) + line.substring(5, 7)][1], 255, 10);
+				ctx.fillRect(spacePositions[line.substring(1, 5)][0] - 35, spacePositions[line.substring(1, 5)][1] + 37, 255, 10);
 				ctx.restore();
 				resolve();
 				break;
@@ -162,36 +186,39 @@ module.exports.run = (board, tictactoe_X, tictactoe_O, tint) => {
 			switch (lineDirection(line.slice(line.length - 3))) {
 			case 'horizontallarge' : {
 				ctx.save();
-				// ctx.rotate((Math.PI / 180) * 45);
 				ctx.fillStyle = '#000000';
-				ctx.fillRect(spacePositions[line.substring(1, 3)][0], 26 + spacePositions[line.substring(1, 3)][1], 190, 10);
+				ctx.fillRect(spacePositions[line.substring(1, 3)][0], (25 * 3) + spacePositions[line.substring(3, 5)][1], 190 * 3, 10 * 3);
 				ctx.restore();
 				resolve();
 				break;
 			}
 			case 'verticallarge' : {
 				ctx.save();
-				// ctx.rotate((Math.PI / 180) * 45);
 				ctx.fillStyle = '#000000';
-				ctx.fillRect(spacePositions[line.substring(1, 3)][0], 26 + spacePositions[line.substring(1, 3)][1], 190, 10);
+				ctx.fillRect((25 * 3) + spacePositions[line.substring(1, 3)][0], spacePositions[line.substring(1, 3)][1], 10 * 3, 190 * 3);
 				ctx.restore();
 				resolve();
 				break;
 			}
 			case 'diagonalbacklarge' : {
 				ctx.save();
-				// ctx.rotate((Math.PI / 180) * 45);
+				ctx.translate(spacePositions[line.substring(1, 3)][0], spacePositions[line.substring(1, 3)][1]);
+				ctx.rotate((Math.PI / 180) * 45);
+				ctx.translate(-spacePositions[line.substring(1, 3)][0], -spacePositions[line.substring(1, 3)][1]);
 				ctx.fillStyle = '#000000';
-				ctx.fillRect(spacePositions[line.substring(1, 3)][0], 26 + spacePositions[line.substring(1, 3)][1], 190, 10);
+				ctx.fillRect(spacePositions[line.substring(1, 3)][0] + (8 * 3), spacePositions[line.substring(1, 3)][1] - (5 * 3), 255 * 3, 10 * 3);
 				ctx.restore();
 				resolve();
 				break;
 			}
 			case 'diagonalforwardlarge' : {
+				console.log(line);
 				ctx.save();
-				// ctx.rotate((Math.PI / 180) * 45);
+				ctx.translate(spacePositions[line.substring(1, 3)][0], spacePositions[line.substring(3, 5)][1]);
+				ctx.rotate((Math.PI / 180) * -45);
+				ctx.translate(-spacePositions[line.substring(1, 3)][0], -spacePositions[line.substring(3, 5)][1]);
 				ctx.fillStyle = '#000000';
-				ctx.fillRect(spacePositions[line.substring(1, 3)][0], 26 + spacePositions[line.substring(1, 3)][1], 190, 10);
+				ctx.fillRect(spacePositions[line.substring(1, 3)][0] - (35 * 3), spacePositions[line.substring(3, 5)][1] + (37 * 3), 255 * 3, 10 * 3);
 				ctx.restore();
 				resolve();
 				break;
