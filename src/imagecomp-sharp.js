@@ -2,6 +2,8 @@ const sharp = require('sharp');
 const { spacePositions, squares, innerSquares } = require('../json/uttt.json');
 
 module.exports.run = (board, tictactoe_X, tictactoe_O, tint) => {
+	const startTime = Date.now();
+
 	const imagePromises = [];
 	let boardstate = [];
 
@@ -423,6 +425,7 @@ module.exports.run = (board, tictactoe_X, tictactoe_O, tint) => {
 						.toFile('./output/board.png');
 				})
 				.then(() => {
+					console.log(`Done: ${Date.now() - startTime} ms`);
 					result();
 				})
 				.catch((err) => console.log(err));

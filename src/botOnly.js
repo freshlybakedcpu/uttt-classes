@@ -59,6 +59,16 @@ const tint = false;
 		});
 	}
 	else {
+		try {
+			fs.writeFileSync('output/save.json', JSON.stringify(board, null, '\t'), function(err) {
+				if(err) {
+					console.log(err);
+				}
+			});
+		}
+		catch (err) {
+			console.error(err);
+		}
 		switch (board._winner !== 'tie') {
 		case true : {
 			console.log(`\n${(turn === 'player1') ? 'Player 2' : 'Player 1'} has won.`);
