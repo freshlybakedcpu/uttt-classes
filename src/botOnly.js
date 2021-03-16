@@ -1,9 +1,16 @@
+'use strict';
+
 const fs = require('fs');
 const Board = require('../classes/board.js');
 const Player = require('../classes/player.js');
 const uttt = require('../json/uttt.json');
+const imgcomp = require('../src/imagecomp-canvas_async');
 
 const board = new Board();
+
+const tictactoe_X = './images/tictactoe_X.png';
+const tictactoe_O = './images/tictactoe_O.png';
+const tint = false;
 
 let turn = 'player1';
 let turnNumber = 1;
@@ -55,5 +62,6 @@ const player2 = new Player('bot');
 			break;
 		}
 		}
+		imgcomp.run(board, tictactoe_X, tictactoe_O, tint);
 	}
 }());
