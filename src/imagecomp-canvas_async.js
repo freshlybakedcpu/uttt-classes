@@ -161,7 +161,6 @@ module.exports.run = (board, tictactoe_X, tictactoe_O, tint) => {
 				break;
 			}
 			case 'diagonalforwardsmall' : {
-				console.log(line);
 				ctx.save();
 				ctx.translate(spacePositions[line.substring(1, 5)][0], spacePositions[line.substring(1, 5)][1]);
 				ctx.rotate((Math.PI / 180) * -45);
@@ -214,11 +213,11 @@ module.exports.run = (board, tictactoe_X, tictactoe_O, tint) => {
 			case 'diagonalforwardlarge' : {
 				console.log(line);
 				ctx.save();
-				ctx.translate(spacePositions[line.substring(1, 3)][0], spacePositions[line.substring(3, 5)][1]);
+				ctx.translate(spacePositions[line.substring(1, 3)][0], spacePositions[line.substring(1, 3)][1]);
 				ctx.rotate((Math.PI / 180) * -45);
-				ctx.translate(-spacePositions[line.substring(1, 3)][0], -spacePositions[line.substring(3, 5)][1]);
+				ctx.translate(-spacePositions[line.substring(1, 3)][0], -spacePositions[line.substring(1, 3)][1]);
 				ctx.fillStyle = '#000000';
-				ctx.fillRect(spacePositions[line.substring(1, 3)][0] - (35 * 3), spacePositions[line.substring(3, 5)][1] + (37 * 3), 255 * 3, 10 * 3);
+				ctx.fillRect(spacePositions[line.substring(1, 3)][0] - (35 * 3), spacePositions[line.substring(1, 3)][1] + (37 * 3), 255 * 3, 10 * 3);
 				ctx.restore();
 				resolve();
 				break;

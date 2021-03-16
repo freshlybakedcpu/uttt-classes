@@ -3,7 +3,6 @@
 const fs = require('fs');
 const Board = require('./classes/board.js');
 const imgcomp = require('./src/imagecomp-canvas_async');
-// const imgcomp = require('./src/imagecomp-sharp');
 
 const board = new Board();
 
