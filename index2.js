@@ -8,20 +8,27 @@ const Player = require('./classes/player.js');
 const uttt = require('./json/uttt.json');
 const imgcomp = require('./src/imagecomp-canvas_async');
 
+// Create an object instance of Board class
 const board = new Board();
 
+// Variable to hold turn; player 1 moves first
 let turn = 'player1';
+// Number of turns in the game
 let turnNumber = 1;
+// Array of valid moves; initialized with all moves valid
 let validMoves = uttt.fullboard;
 
+// Resets file used to hold game history
 fs.truncateSync('./output/gameHistory.txt', 0);
 
 // Game setup
 console.log('\nWelcome to Ultimate Tic-Tac-Toe!\n');
 
+// Sets players equal to input from user
 const player1 = new Player(playerType('1'));
 const player2 = new Player(playerType('2'));
 
+// Asks users to input type of player (for players 1 and 2)
 function playerType(num) {
 	switch (rl.question(`Is \x1b[48;5;${(num === '1') ? '1' : '33'}mplayer ${num}\x1b[0m a bot or human? `).toLowerCase()) {
 	case 'bot' : return 'bot';
@@ -35,6 +42,7 @@ function playerType(num) {
 	}
 }
 
+// Set to true if custom images will be used and vice versa.
 const imageBool = imagePrompt();
 
 function imagePrompt() {
@@ -56,10 +64,12 @@ function imageAssignment(piece) {
 	case true : {
 		const givenPath = rl.question(`\tPlease provide the path of the image that will represent ${(piece === 'X') ? 'player 1' : 'player 2'}: `);
 		switch (givenPath) {
+		// Entering "default" will prompt the program to use the default pieces
 		case 'default' : {
 			return (piece === 'X') ? './images/tictactoe_X.png' : './images/tictactoe_O.png';
 		}
 		default : {
+			// Checks if the path for the image is valid
 			switch (fs.existsSync(givenPath)) {
 			case true : {
 				return givenPath;
@@ -72,6 +82,7 @@ function imageAssignment(piece) {
 		}
 		}
 	}
+	// If the user opted not to use custom pieces, the program uses the default images
 	default : {
 		return (piece === 'X') ? './images/tictactoe_X.png' : './images/tictactoe_O.png';
 	}
