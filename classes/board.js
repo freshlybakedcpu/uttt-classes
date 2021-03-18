@@ -35,11 +35,11 @@ class Board {
 		this[square].checkWins();
 		switch (this[square]._winner) {
 		case 'X' :
-			fs.appendFileSync('./output/gameHistory.txt', `\t${square.substring(1)}; Winner: Player 1`);
+			fs.appendFileSync('./output/gameHistory.txt', `\t${square.substring(1)}; Winner: Player 1\n`);
 			console.log(`${square.substring(1)}; Winner: Player 1\n`);
 			break;
 		case 'O' :
-			fs.appendFileSync('./output/gameHistory.txt', `\t${square.substring(1)}; Winner: Player 2`);
+			fs.appendFileSync('./output/gameHistory.txt', `\t${square.substring(1)}; Winner: Player 2\n`);
 			console.log(`${square.substring(1)}; Winner: Player 2\n`);
 			break;
 		default :
