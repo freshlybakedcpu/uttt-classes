@@ -103,7 +103,6 @@ class Board {
 		}
 	}
 	validMoves(position) {
-		// const square = '_' + position.substring(0, 2);
 		const orientation = (() => {
 			switch (position.substring(2, 4)) {
 			case 'X1' : return '_A1';
