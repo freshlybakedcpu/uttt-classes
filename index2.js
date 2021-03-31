@@ -1,7 +1,7 @@
 'use strict';
 
 const fs = require('fs');
-const path = require('path');
+// const path = require('path');
 const rl = require('readline-sync');
 const Board = require('./classes/board.js');
 const Player = require('./classes/player.js');
@@ -137,7 +137,7 @@ if (importPath) {
 	// board.importJSON(JSON.parse(jsonData));
 	console.log(board);
 }
-
+*/
 (function loop() {
 	if (board._winner === null) {
 		const move = (() => {

@@ -47,7 +47,6 @@ class Board {
 		}
 	}
 	gameWon() {
-		// Note: Incomplete. Need to program what happens once a winner is determined.
 		// Player 1
 		if(this._A1._winner === 'X' && this._A2._winner === 'X' && this._A3._winner === 'X') {
 			this._winner = 'XA1A3' + 'VVL'; // Vertical large
@@ -139,8 +138,6 @@ class Board {
 			}
 			return validMoves;
 		}
-		// const place = '_' + position.substring(2, 4);
-		// return (this[square][place] === null) ? true : false;
 	}
 }
 
