@@ -1,7 +1,7 @@
 'use strict';
 
 const fs = require('fs');
-// const path = require('path');
+const path = require('path');
 const rl = require('readline-sync');
 const Board = require('./classes/board.js');
 const Player = require('./classes/player.js');
@@ -133,12 +133,18 @@ function importPathPrompt() {
 // https://stackoverflow.com/questions/30339675/how-to-map-json-data-to-a-class
 if (importPath) {
 	const jsonData = fs.readFileSync(importPath);
-	Object.assign(board, JSON.parse(jsonData));
-	// board.importJSON(JSON.parse(jsonData));
-	console.log(board);
+	board.importJSON(JSON.parse(jsonData));
+	turn = (board._lastMove.charAt(0) === 'X') ? 'player1' : 'player2';
+	validMoves = board.validMoves(board._lastMove.substring(1));
+	imgcomp.run(board, tictactoe_X, tictactoe_O, tint).then(() => {
+		loop();
+	});
 }
-*/
-(function loop() {
+else {
+	loop();
+}
+
+function loop() {
 	if (board._winner === null) {
 		const move = (() => {
 			switch ((turn === 'player1') ? player1._type : player2._type) {
@@ -182,7 +188,7 @@ if (importPath) {
 		}
 		}
 	}
-}());
+}
 
 function userPrompt(player) {
 	const choice = rl.question(`\n\x1b[48;5;${(player === 'player1') ? '1' : '33'}m${player}\x1b[0m, your move: `);

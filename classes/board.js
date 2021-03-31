@@ -23,12 +23,24 @@ class Board {
 	}
 
 	importJSON(jsonData) {
-		Object.assign(this, jsonData);
+		// Object.assign(this, jsonData);
+		for (const [key, value] of Object.entries(this)) {
+			console.log(`${key}, ${value}`);
+			if(typeof jsonData[key] === 'object' && jsonData[key] !== null) {
+				console.log('\tis object');
+				Object.assign(this[key], jsonData[key]);
+			}
+			else {
+				this[key] = jsonData[key];
+			}
+		}
+		console.log(this);
 	}
 	inputMove(position, player) {
 		const square = '_' + position.substring(0, 2);
 		const place = '_' + position.substring(2, 4);
 		this[square][place] = (player === 'player1') ? 'X' : 'O';
+		this._lastMove = `${(player === 'player1') ? 'X' : 'O'}${position}`;
 	}
 	checkWinner(position) {
 		const square = '_' + position.substring(0, 2);
