@@ -7,6 +7,7 @@ const Board = require('./classes/board.js');
 const Player = require('./classes/player.js');
 const uttt = require('./json/uttt.json');
 const imgcomp = require('./src/imagecomp-canvas_async');
+const tintScript = require('./src/tint');
 
 // Create an object instance of Board class
 const board = new Board();
@@ -102,6 +103,22 @@ function tintPrompt() {
 	}
 }
 
+const tintImage_X = tintImageAssign(tictactoe_X, 'X');
+const tintImage_O = tintImageAssign(tictactoe_O, 'O');
+
+console.log(typeof tintImage_X);
+
+function tintImageAssign(image, type) {
+	if (tint) {
+		tintScript.run(image, type).then(result => {
+			return result;
+		});
+	}
+	else {
+		return null;
+	}
+}
+
 const importPath = importPrompt();
 
 function importPrompt() {
@@ -132,21 +149,13 @@ function importPathPrompt() {
 
 // https://stackoverflow.com/questions/30339675/how-to-map-json-data-to-a-class
 if (importPath) {
-	console.log(); // Adds an extra line of space
 	const jsonData = fs.readFileSync(importPath);
-	board.importJSON(JSON.parse(jsonData));
-	turn = (board._lastMove.charAt(0) === 'X') ? 'player1' : 'player2';
-	validMoves = board.validMoves(board._lastMove.substring(1));
-	console.log(validMoves);
-	imgcomp.run(board, tictactoe_X, tictactoe_O, tint).then(() => {
-		loop();
-	});
-}
-else {
-	loop();
+	Object.assign(board, JSON.parse(jsonData));
+	// board.importJSON(JSON.parse(jsonData));
+	console.log(board);
 }
 
-function loop() {
+(function loop() {
 	if (board._winner === null) {
 		const move = (() => {
 			switch ((turn === 'player1') ? player1._type : player2._type) {
@@ -171,7 +180,7 @@ function loop() {
 		turn = (turn === 'player1') ? 'player2' : 'player1';
 		validMoves = board.validMoves(move);
 		console.log(validMoves);
-		imgcomp.run(board, tictactoe_X, tictactoe_O, tint).then(() => {
+		imgcomp.run(board, tictactoe_X, tictactoe_O, tint, tintImage_X, tintImage_O).then(() => {
 			turnNumber++;
 			loop();
 		});
@@ -190,7 +199,7 @@ function loop() {
 		}
 		}
 	}
-}
+}());
 
 function userPrompt(player) {
 	const choice = rl.question(`\n\x1b[48;5;${(player === 'player1') ? '1' : '33'}m${player}\x1b[0m, your move: `);
