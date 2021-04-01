@@ -23,7 +23,7 @@ const player1 = new Player('bot');
 const player2 = new Player('bot');
 
 (function loop() {
-	if (!board._winner) {
+	if (!board._winner && turnNumber <= 10) {
 		const move = (() => {
 			const botMove = (turn === 'player1') ? player1.randomMove(validMoves) : player2.randomMove(validMoves);
 			console.log(botMove);

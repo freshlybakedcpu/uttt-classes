@@ -25,16 +25,15 @@ class Board {
 	importJSON(jsonData) {
 		// Object.assign(this, jsonData);
 		for (const [key, value] of Object.entries(this)) {
-			console.log(`${key}, ${value}`);
+			// console.log(`${key}, ${value}`);
 			if(typeof jsonData[key] === 'object' && jsonData[key] !== null) {
-				console.log('\tis object');
 				Object.assign(this[key], jsonData[key]);
 			}
 			else {
 				this[key] = jsonData[key];
 			}
 		}
-		console.log(this);
+		// console.log(this);
 	}
 	inputMove(position, player) {
 		const square = '_' + position.substring(0, 2);

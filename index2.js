@@ -132,10 +132,12 @@ function importPathPrompt() {
 
 // https://stackoverflow.com/questions/30339675/how-to-map-json-data-to-a-class
 if (importPath) {
+	console.log(); // Adds an extra line of space
 	const jsonData = fs.readFileSync(importPath);
 	board.importJSON(JSON.parse(jsonData));
 	turn = (board._lastMove.charAt(0) === 'X') ? 'player1' : 'player2';
 	validMoves = board.validMoves(board._lastMove.substring(1));
+	console.log(validMoves);
 	imgcomp.run(board, tictactoe_X, tictactoe_O, tint).then(() => {
 		loop();
 	});
