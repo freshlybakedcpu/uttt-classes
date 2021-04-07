@@ -3,7 +3,7 @@ global.Image = nodeCanvas.Image;
 const fs = require('fs');
 const { spacePositions, squares, innerSquares } = require('../json/uttt.json');
 
-module.exports.run = (board, tictactoe_X, tictactoe_O, tint, tintImage_X, tintImage_O) => {
+module.exports.run = (board, tictactoe_X, tictactoe_O) => {
 	const startTime = Date.now();
 
 	return new Promise((result) => {
@@ -110,8 +110,8 @@ module.exports.run = (board, tictactoe_X, tictactoe_O, tint, tintImage_X, tintIm
 		async function drawPiece(piece, size) {
 			return new Promise(resolve => {
 				nodeCanvas.loadImage((piece.charAt(0) === 'X') ? tictactoe_X : tictactoe_O).then(pieceImage => {
-					console.log(typeof tintImage_X);
-					ctx.drawImage((!tint) ? pieceImage : (piece.charAt(0) === 'X') ? tintImage_X : tintImage_O, spacePositions[piece.substring(1)][0], spacePositions[piece.substring(1)][1], size, size);
+					// console.log(typeof tintImage_X);
+					ctx.drawImage(pieceImage, spacePositions[piece.substring(1)][0], spacePositions[piece.substring(1)][1], size, size);
 					resolve();
 				}).catch(err => {
 					console.log(err);

@@ -7,7 +7,7 @@ const Board = require('./classes/board.js');
 const Player = require('./classes/player.js');
 const uttt = require('./json/uttt.json');
 const imgcomp = require('./src/imagecomp-canvas_async');
-const tintScript = require('./src/tint');
+// const tintScript = require('./src/tint');
 
 // Create an object instance of Board class
 const board = new Board();
@@ -90,6 +90,7 @@ function imageAssignment(piece) {
 	}
 }
 
+/*
 const tint = tintPrompt();
 
 function tintPrompt() {
@@ -118,6 +119,7 @@ function tintImageAssign(image, type) {
 		return null;
 	}
 }
+*/
 
 const importPath = importPrompt();
 
@@ -150,8 +152,7 @@ function importPathPrompt() {
 // https://stackoverflow.com/questions/30339675/how-to-map-json-data-to-a-class
 if (importPath) {
 	const jsonData = fs.readFileSync(importPath);
-	Object.assign(board, JSON.parse(jsonData));
-	// board.importJSON(JSON.parse(jsonData));
+	board.importJSON(JSON.parse(jsonData));
 	console.log(board);
 }
 
@@ -180,24 +181,26 @@ if (importPath) {
 		turn = (turn === 'player1') ? 'player2' : 'player1';
 		validMoves = board.validMoves(move);
 		console.log(validMoves);
-		imgcomp.run(board, tictactoe_X, tictactoe_O, tint, tintImage_X, tintImage_O).then(() => {
+		imgcomp.run(board, tictactoe_X, tictactoe_O).then(() => {
 			turnNumber++;
 			loop();
 		});
 	}
 	else {
-		switch (board._winner !== 'tie') {
-		case true : {
-			console.log(`\n${(turn === 'player1') ? 'Player 2' : 'Player 1'} has won.`);
-			fs.appendFileSync('./output/gameHistory.txt', `\n${(turn === 'player1') ? 'Player 2' : 'Player 1'} has won.`);
-			break;
-		}
-		case false : {
-			console.log('\nTie.');
-			fs.appendFileSync('./output/gameHistory.txt', '\nTie.');
-			break;
-		}
-		}
+		imgcomp.run(board, tictactoe_X, tictactoe_O).then(() => {
+			switch (board._winner !== 'tie') {
+			case true : {
+				console.log(`\n${(turn === 'player1') ? 'Player 2' : 'Player 1'} has won.`);
+				fs.appendFileSync('./output/gameHistory.txt', `\n${(turn === 'player1') ? 'Player 2' : 'Player 1'} has won.`);
+				break;
+			}
+			case false : {
+				console.log('\nTie.');
+				fs.appendFileSync('./output/gameHistory.txt', '\nTie.');
+				break;
+			}
+			}
+		});
 	}
 }());
 
