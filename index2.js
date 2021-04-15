@@ -7,6 +7,7 @@ const Board = require('./classes/board.js');
 const Player = require('./classes/player.js');
 const uttt = require('./json/uttt.json');
 const imgcomp = require('./src/imagecomp-canvas_async');
+const rulescomp = require('./src/rulescomp');
 // const tintScript = require('./src/tint');
 
 // Create an object instance of Board class
@@ -23,74 +24,79 @@ let validMoves = uttt.fullboard;
 fs.truncateSync('./output/gameHistory.txt', 0);
 
 // Game setup
-console.log('\nWelcome to Ultimate Tic-Tac-Toe!\n');
-
+console.log('\nWelcome to Ultimate Tic-Tac-Toe!');
+rulescomp.run().then(() => {
 // Sets players equal to input from user
-const player1 = new Player(playerType('1'));
-const player2 = new Player(playerType('2'));
+	const player1 = new Player(playerType('1'));
+	const player2 = new Player(playerType('2'));
 
-// Asks users to input type of player (for players 1 and 2)
-function playerType(num) {
-	switch (rl.question(`Is \x1b[48;5;${(num === '1') ? '1' : '33'}mplayer ${num}\x1b[0m a bot or human? `).toLowerCase()) {
-	case 'bot' : return 'bot';
-	case 'b' : return 'bot';
-	case 'human' : return 'human';
-	case 'h' : return 'human';
-	default : {
-		console.log('Invalid input. Choices: \'bot\', \'human\'.\n');
-		return playerType(num);
-	}
-	}
-}
-
-// Set to true if custom images will be used and vice versa.
-const imageBool = imagePrompt();
-
-function imagePrompt() {
-	switch (rl.question('\nWould you like to use custom images for the pieces? (y/n) ').toLowerCase()) {
-	case 'y' : return true;
-	case 'n' : return false;
-	default : {
-		console.log('Invalid input. Choices: \'y\', \'n\'.\n');
-		imagePrompt();
-	}
-	}
-}
-
-const tictactoe_X = imageAssignment('X');
-const tictactoe_O = imageAssignment('O');
-
-function imageAssignment(piece) {
-	switch (imageBool) {
-	case true : {
-		const givenPath = rl.question(`\tPlease provide the path of the image that will represent ${(piece === 'X') ? 'player 1' : 'player 2'}: `);
-		switch (givenPath) {
-		// Entering "default" will prompt the program to use the default pieces
-		case 'default' : {
-			return (piece === 'X') ? './images/tictactoe_X.png' : './images/tictactoe_O.png';
-		}
+	// Asks users to input type of player (for players 1 and 2)
+	function playerType(num) {
+		switch (rl.question(`Is \x1b[48;5;${(num === '1') ? '1' : '33'}mplayer ${num}\x1b[0m a bot or human? `).toLowerCase()) {
+		case 'bot' : return 'bot';
+		case 'b' : return 'bot';
+		case 'human' : return 'human';
+		case 'h' : return 'human';
 		default : {
-			// Checks if the path for the image is valid
-			switch (fs.existsSync(givenPath)) {
-			case true : {
-				return givenPath;
+			console.log('Invalid input. Choices: \'bot\', \'human\'.\n');
+			return playerType(num);
+		}
+		}
+	}
+
+	// Set to true if custom images will be used and vice versa.
+	const imageBool = imagePrompt();
+
+	function imagePrompt() {
+		switch (rl.question('\nWould you like to use custom images for the pieces? (y/n) ').toLowerCase()) {
+		case 'y' : return true;
+		case 'n' : return false;
+		default : {
+			console.log('Invalid input. Choices: \'y\', \'n\'.\n');
+			imagePrompt();
+		}
+		}
+	}
+
+	// Variable to hold image path for player 1
+	const tictactoe_X = imageAssignment('X');
+	// Variable to hold image path for player 2
+	const tictactoe_O = imageAssignment('O');
+
+	// Function for assigning variables with the appropriate path
+	function imageAssignment(piece) {
+		switch (imageBool) {
+		// Runs if an affirmative answer was provided to the previous question
+		case true : {
+		// Prompts player to provide a custom path
+			const givenPath = rl.question(`\tPlease provide the path of the image that will represent ${(piece === 'X') ? 'player 1' : 'player 2'}: `);
+			switch (givenPath) {
+			// Entering "default" will prompt the program to use the default pieces
+			case 'default' : {
+				return (piece === 'X') ? './images/tictactoe_X.png' : './images/tictactoe_O.png';
 			}
 			default : {
-				console.log('\tInvalid path.\n');
-				return imageAssignment(piece);
+			// Checks if the path for the image is valid
+				switch (fs.existsSync(givenPath)) {
+				case true : {
+					return givenPath;
+				}
+				default : {
+					console.log('\tInvalid path.\n');
+					return imageAssignment(piece);
+				}
+				}
 			}
 			}
 		}
+		// If the user opted not to use custom pieces, the program uses the default images
+		default : {
+			return (piece === 'X') ? './images/tictactoe_X.png' : './images/tictactoe_O.png';
+		}
 		}
 	}
-	// If the user opted not to use custom pieces, the program uses the default images
-	default : {
-		return (piece === 'X') ? './images/tictactoe_X.png' : './images/tictactoe_O.png';
-	}
-	}
-}
 
-/*
+	/*
 const tint = tintPrompt();
 
 function tintPrompt() {
@@ -121,115 +127,120 @@ function tintImageAssign(image, type) {
 }
 */
 
-const importPath = importPrompt();
+	const importPath = importPrompt();
 
-function importPrompt() {
-	switch (rl.question('\nWould you like to import existing save data? (y/n) ').toLowerCase()) {
-	case 'y' : return importPathPrompt();
-	case 'n' : return false;
-	default : {
-		console.log('Invalid input. Choices: \'y\', \'n\'.\n');
-		importPrompt();
+	function importPrompt() {
+		switch (rl.question('\nWould you like to import existing save data? (y/n) ').toLowerCase()) {
+		case 'y' : return importPathPrompt();
+		case 'n' : return false;
+		default : {
+			console.log('Invalid input. Choices: \'y\', \'n\'.\n');
+			importPrompt();
+		}
+		}
 	}
-	}
-}
 
-function importPathPrompt() {
-	const givenPath = rl.question('\nWhat is the path? ');
-	try {
-		if (fs.existsSync(path.resolve(givenPath)) && /^.+\.(?:(?:[jJ][sS][oO][nN]))$/.test(givenPath)) {
-			return path.resolve(givenPath);
+	function importPathPrompt() {
+		const givenPath = rl.question('\nWhat is the path? ');
+		try {
+			if (fs.existsSync(path.resolve(givenPath)) && /^.+\.(?:(?:[jJ][sS][oO][nN]))$/.test(givenPath)) {
+				return path.resolve(givenPath);
+			}
+			else {
+				return importPathPrompt();
+			}
+		}
+		catch(err) {
+			console.error(err);
+		}
+	}
+
+	// https://stackoverflow.com/questions/30339675/how-to-map-json-data-to-a-class
+	if (importPath) {
+		const jsonData = fs.readFileSync(importPath);
+		board.importJSON(JSON.parse(jsonData));
+		console.log(board);
+	}
+
+	imgcomp.run(board, tictactoe_X, tictactoe_O).then(() => {
+		loop();
+	});
+
+	function loop() {
+		if (board._winner === null) {
+			const move = (() => {
+				switch ((turn === 'player1') ? player1._type : player2._type) {
+				case 'bot' : {
+					const botMove = (turn === 'player1') ? player1.randomMove(validMoves) : player2.randomMove(validMoves);
+					console.log(`\n\x1b[48;5;${(turn === 'player1') ? '1' : '33'}m${(turn === 'player1') ? 'player 1' : 'player 2'}\x1b[0m's move: ${botMove}`);
+					return botMove;
+				}
+				case 'human' : {
+					return userPrompt(turn);
+				}
+				default : {
+					return userPrompt(turn);
+				}
+				}
+			})();
+			board._lastMove = move;
+			fs.appendFileSync('./output/gameHistory.txt', `${turnNumber}\t${turn}: ${move}\n`);
+			board.inputMove(move, turn);
+			board.checkWinner(move);
+			board.gameWon();
+			turn = (turn === 'player1') ? 'player2' : 'player1';
+			validMoves = board.validMoves(move);
+			console.log(validMoves);
+			imgcomp.run(board, tictactoe_X, tictactoe_O).then(() => {
+				turnNumber++;
+				loop();
+			});
 		}
 		else {
-			return importPathPrompt();
-		}
-	}
-	catch(err) {
-		console.error(err);
-	}
-}
-
-// https://stackoverflow.com/questions/30339675/how-to-map-json-data-to-a-class
-if (importPath) {
-	const jsonData = fs.readFileSync(importPath);
-	board.importJSON(JSON.parse(jsonData));
-	console.log(board);
-}
-
-(function loop() {
-	if (board._winner === null) {
-		const move = (() => {
-			switch ((turn === 'player1') ? player1._type : player2._type) {
-			case 'bot' : {
-				const botMove = (turn === 'player1') ? player1.randomMove(validMoves) : player2.randomMove(validMoves);
-				console.log(`\n\x1b[48;5;${(turn === 'player1') ? '1' : '33'}m${(turn === 'player1') ? 'player 1' : 'player 2'}\x1b[0m's move: ${botMove}`);
-				return botMove;
-			}
-			case 'human' : {
-				return userPrompt(turn);
-			}
-			default : {
-				return userPrompt(turn);
-			}
-			}
-		})();
-		board._lastMove = move;
-		fs.appendFileSync('./output/gameHistory.txt', `${turnNumber}\t${turn}: ${move}\n`);
-		board.inputMove(move, turn);
-		board.checkWinner(move);
-		board.gameWon();
-		turn = (turn === 'player1') ? 'player2' : 'player1';
-		validMoves = board.validMoves(move);
-		console.log(validMoves);
-		imgcomp.run(board, tictactoe_X, tictactoe_O).then(() => {
-			turnNumber++;
-			loop();
-		});
-	}
-	else {
-		imgcomp.run(board, tictactoe_X, tictactoe_O).then(() => {
-			switch (board._winner !== 'tie') {
-			case true : {
-				console.log(`\n${(turn === 'player1') ? 'Player 2' : 'Player 1'} has won.`);
-				fs.appendFileSync('./output/gameHistory.txt', `\n${(turn === 'player1') ? 'Player 2' : 'Player 1'} has won.`);
-				break;
-			}
-			case false : {
-				console.log('\nTie.');
-				fs.appendFileSync('./output/gameHistory.txt', '\nTie.');
-				break;
-			}
-			}
-		});
-	}
-}());
-
-function userPrompt(player) {
-	const choice = rl.question(`\n\x1b[48;5;${(player === 'player1') ? '1' : '33'}m${player}\x1b[0m, your move: `);
-	if(validMoves.includes(choice)) {
-		return choice;
-	}
-	else if(choice === 'export') {
-		// console.log(JSON.stringify(board));
-		try {
-			fs.writeFileSync('output/save.json', JSON.stringify(board, null, '\t'), function(err) {
-				if(err) {
-					console.log(err);
+			imgcomp.run(board, tictactoe_X, tictactoe_O).then(() => {
+				switch (board._winner !== 'tie') {
+				case true : {
+					console.log(`\n${(turn === 'player1') ? 'Player 2' : 'Player 1'} has won.`);
+					fs.appendFileSync('./output/gameHistory.txt', `\n${(turn === 'player1') ? 'Player 2' : 'Player 1'} has won.`);
+					break;
+				}
+				case false : {
+					console.log('\nTie.');
+					fs.appendFileSync('./output/gameHistory.txt', '\nTie.');
+					break;
+				}
 				}
 			});
 		}
-		catch (err) {
-			console.error(err);
-		}
-		return userPrompt(player);
 	}
-	else {
-		return invalidMovePrompt(player);
-	}
-}
 
-function invalidMovePrompt(player) {
-	console.log(`\x1b[1A\x1b[2KInvalid move. Playable moves: \x1b[38;5;46m${validMoves}\x1b[0m.`);
-	const choice = rl.question(`\x1b[48;5;${(player === 'player1') ? '1' : '33'}m${player}\x1b[0m, your move: `);
-	return (validMoves.includes(choice)) ? choice : invalidMovePrompt(player);
-}
+	function userPrompt(player) {
+		const choice = rl.question(`\n\x1b[48;5;${(player === 'player1') ? '1' : '33'}m${player}\x1b[0m, your move: `);
+		if(validMoves.includes(choice)) {
+			return choice;
+		}
+		else if(choice === 'export') {
+		// console.log(JSON.stringify(board));
+			try {
+				fs.writeFileSync('output/save.json', JSON.stringify(board, null, '\t'), function(err) {
+					if(err) {
+						console.log(err);
+					}
+				});
+			}
+			catch (err) {
+				console.error(err);
+			}
+			return userPrompt(player);
+		}
+		else {
+			return invalidMovePrompt(player);
+		}
+	}
+
+	function invalidMovePrompt(player) {
+		console.log(`\x1b[1A\x1b[2KInvalid move. Playable moves: \x1b[38;5;46m${validMoves}\x1b[0m.`);
+		const choice = rl.question(`\x1b[48;5;${(player === 'player1') ? '1' : '33'}m${player}\x1b[0m, your move: `);
+		return (validMoves.includes(choice)) ? choice : invalidMovePrompt(player);
+	}
+});

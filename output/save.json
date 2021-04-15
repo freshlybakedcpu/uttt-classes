@@ -1,19 +1,19 @@
 {
 	"_A1": {
 		"_X1": "X",
-		"_X2": null,
+		"_X2": "X",
 		"_X3": null,
 		"_Y1": null,
-		"_Y2": "X",
+		"_Y2": null,
 		"_Y3": null,
 		"_Z1": null,
-		"_Z2": "O",
-		"_Z3": null,
+		"_Z2": null,
+		"_Z3": "O",
 		"_winner": null,
 		"_winningCombination": null
 	},
 	"_A2": {
-		"_X1": null,
+		"_X1": "O",
 		"_X2": null,
 		"_X3": null,
 		"_Y1": null,
@@ -60,12 +60,12 @@
 		"_Y3": null,
 		"_Z1": null,
 		"_Z2": null,
-		"_Z3": "O",
+		"_Z3": null,
 		"_winner": null,
 		"_winningCombination": null
 	},
 	"_B3": {
-		"_X1": null,
+		"_X1": "O",
 		"_X2": null,
 		"_X3": null,
 		"_Y1": null,
@@ -99,17 +99,17 @@
 		"_Y3": null,
 		"_Z1": null,
 		"_Z2": null,
-		"_Z3": "X",
+		"_Z3": null,
 		"_winner": null,
 		"_winningCombination": null
 	},
 	"_C3": {
-		"_X1": "O",
+		"_X1": null,
 		"_X2": null,
 		"_X3": null,
 		"_Y1": null,
 		"_Y2": null,
-		"_Y3": null,
+		"_Y3": "X",
 		"_Z1": null,
 		"_Z2": null,
 		"_Z3": null,
@@ -117,5 +117,5 @@
 		"_winningCombination": null
 	},
 	"_winner": null,
-	"_lastMove": "OB2Z3"
+	"_lastMove": "OA2X1"
 }
