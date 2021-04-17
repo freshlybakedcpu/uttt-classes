@@ -16,6 +16,10 @@ module.exports.run = (board, tictactoe_X, tictactoe_O) => {
 		const globalLine = [];
 
 		for (const [key, value] of Object.entries(board)) {
+			arrayAssignment(key, value);
+		}
+
+		function arrayAssignment(key, value) {
 			if (squares.includes(key.substring(1))) {
 				for (const [innerKey, innerValue] of Object.entries(value)) {
 					if (innerSquares.includes(innerKey.substring(1)) && innerValue === 'X') {
@@ -33,18 +37,12 @@ module.exports.run = (board, tictactoe_X, tictactoe_O) => {
 			else if (key.substring(1) === 'winner' && value !== null) {
 				switch (value.startsWith('X') || value.startsWith('O')) {
 				case true : {
-				// boardstate.push(`L${value.substring(1)}`);
 					globalLine.push(`L${value.substring(1)}`);
 				}
 				}
 			}
 		}
-		/*
-		console.log(localPieces);
-		console.log(globalPieces);
-		console.log(localLines);
-		console.log(globalLine);
-		*/
+
 		function lineDirection(code) {
 			switch (code) {
 			case 'VVS' : return 'verticalsmall';

@@ -24,7 +24,7 @@ class Board {
 
 	importJSON(jsonData) {
 		// Object.assign(this, jsonData);
-		for (const [key, value] of Object.entries(this)) {
+		for (const [key] of Object.entries(this)) {
 			// console.log(`${key}, ${value}, ${jsonData[key]}`);
 			if(typeof jsonData[key] === 'object' && jsonData[key] !== null) {
 				Object.assign(this[key], jsonData[key]);
